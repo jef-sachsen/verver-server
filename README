@@ -1,0 +1,172 @@
+This is a draft document that has been produced during the software internship at University Leipzig during the winter semester 2017/2018. The development of this software will continue in this public repository and during this process this readme will be translated into english.
+
+
+_Stand 16.04.2018_
+
+Diese Entwurfsbeschreibung beinhaltet die Grundideen sowie die relevanten technischen Aspekte zur Beschreibung der Software der Gruppe mf17a. Sie soll neuen Entwicklern eine schnelle und zielgerichtete Einarbeitung ermöglichen.
+
+# 1. Allgemeines
+
+Aktuelle Version: 0.5.0
+
+Im Rahmen des SWTP 2017/2018 an der Uni Leipzig hat sich die Gruppe mf17a zum Ziel gesetzt eine Mitgliederverwaltungs-Software zu entwickeln, die deutschen Vereinen die Verwaltung von Mitgliedern vereinfacht. Darüber hinaus soll der Grundstein gelegt werden, um die Software langfristig zu einer Vereinsverwaltung auszubauen.
+
+Die Software verfolgt die folgenden Grundideen, um eine langfristige Etablierung zu ermöglichen:
+
+1. Open Source by Default
+2. Client-Server-Architektur inkl. Statelessness
+3. Modularer Aufbau
+4. Hoher Sicherheitsstandard
+5. Privacy by Default
+
+Zu 1) Open Source by Default: Ein Kern-Aspekt bei Vereine ist die Ehrenamtlichkeit, die im Geiste der Software widergespiegelt werden soll.
+
+Zu 2) Client-Server-Architektur inkl. Statelessness: Die Software soll in der bewährten Client-Server-Architektur entwickelt und über eine REST-API angebunden werden. Damit ist der potentiell plattformübergreifende Zugriff durch verschiedene, unabhängige Clients sichergestellt.
+
+Zu 3) Modularer Aufbau: Die Software soll einen modularen Gedanken verfolgen, um spätere Erweiterbarkeit einfach zu gestalten. 
+
+Zu 4) Hoher Sicherheitsstandard: Die Software sollte von vornherein so gestaltet sein, dass die Sicherheit sowohl über die API, als auch System-intern gewährleistet ist. Zusätzlich sollten die Module die Sicherheitskonzepte des Systems nutzen bzw. wiederverwenden können, um Zugriffsbeschränkungen feingranular steuern zu können.
+
+Zu 5) Privacy by Default: Ab dem 25.Mai 2018 gilt in Europa die neue Datenschutzgrundverordnung (DSGVO). Diese wird im Hinblick auf den Umgang mit persönlichen Daten zu erheblichen Veränderungen führen. Die Software soll von vornherein so konzipiert sein, dass sie die Perspektive der DSGVO berücksichtigt. Dabei soll insbesondere das Kernprinzip der Verodnung -- der Nutzer hat die Hoheit über seine Daten -- berücksichtigt werden.
+
+
+# 2. Projektübersicht
+
+Die Software, die während des SWTP entwickelt wird besteht aus:
+
+- Dem Quelltext für einen Server und einen Web-Client (Client-Server-Architektur),
+- dem [Projektplan](http://pcai042.informatik.uni-leipzig.de/~mf17a/jekyll/projektdokumente/projektplan/),
+- [Releaseplan](http://pcai042.informatik.uni-leipzig.de/~mf17a/jekyll/projektdokumente/releaseplan/) und
+- der [Entwurfsbeschreibung](http://pcai042.informatik.uni-leipzig.de/~mf17a/jekyll/projektdokumente/entwurfsbeschreibung/).
+
+Die Entwicklung findet in einem [Gitlab-Repository der Universität Leipzig statt](https://git.informatik.uni-leipzig.de/swp17/mf17a). Die Dokumente werden über die [Homepage](http://pcai042.informatik.uni-leipzig.de/~mf17a/jekyll/) der Gruppe mf17a veröffentlicht.
+
+Die grundsätzliche Organisation der Arbeit läuft über den Gitlab-Issue-Tracker und durch regelmäßige Treffen.
+
+# 3. Produktübersicht
+
+## 3.1 Verwendete Technologien
+
+**Server**
+
+- **Programmiersprachen:** Java
+- **Frameworks:** Spring Boot, Spring Data, Spring Security, Spring Security ACL, JJWT
+- **Build-Tool:** Maven
+- **Datenbank/Migration**: MariaDB/Flyway
+- **Testing-Framework:** JUnit, Mockmvc
+- **Pfad im Repository:** `mf17a/server/mv`
+
+**Client**
+
+- **Programmiersprachen/Markup:** JavaScript, HTML5, CSS 3.0
+- **Frameworks:** React/Redux
+- **Build-Tool:** Yarn
+- **Testing-Framework:** Jest, Enzym
+- **Pfad im Repository:** `mf17a/webclient/`
+
+## 3.2 Release-Tagging und Continuous Integration
+
+Im Rahmen des Projektes wird das Git Branching Model _Git-Flow_ von Vincent Driessen angewendet.
+
+Im Branch _develop_ wird nur Code commited, der stabile Builds erzeugt. Um dies sicherzustellen werden bei jedem Push zum Branch _develop_  die Tests ausgelöst. Falls die Tests erfolgreich sind wird eine neue Build erstellt.
+
+Einmal am Tag wird mit dem letzten stabilen Build ein Docker Image erzeugt, das Docker Hub gepusht wird. Sollte ein Test oder der Build fehlschlagen wird das Team bei Slack benachrichtigt.
+
+Da die die automatisierten Builds nicht direkt mit dem vorhandenen Gitlab CI umsetzbar sind, da kein Docker vorhanden ist, wird einen Jenkins Server genutzt, um die CI Pipeline auszuführen.
+
+Releases werden mit Hilfe von _Git-Flow_ erstellt und nach folgendem Muster getagged: 1.2.3.
+
+Dabei steht die 1 für ein _major_ Release, die 2 für ein _minor_ Release und die 3 für einen Patch/Bugfix (siehe auch [Semantic Versioning](https://semver.org)). Am Ende des SWTP soll Version _1.0.0_ released werden.
+
+## 3.3 Demoversion
+
+Die aktuellste _Passing Build_ wird automatisch erstellt und ist über [https://swt.leoek.eu](https://swt.leoek.eu) erreichbar.
+
+# 4. Struktur- und Entwurfsprinzipien
+
+## 4.1 REST-API
+
+Server und Client kommunizieren über eine REST-API, um das Prinzip der Statelessness aufzugreifen. Die exakte API-Beschreibung ist Teil des Repository und der Dokumentation.
+
+- **Aktuelle API-Version:** 0.5.0
+- **Pfad zur API-Beschreibung im Repository:** `mf17a/api.yml`
+- **API-Editor (zur Vereinfachten Darstellung der API-Beschreibung):** [Swagger.io Editor](https://editor.swagger.io/)
+
+Es ist geplant zukünftig die API automatisch generieren zu lassen, um stets eine aktuelle Version unter einem definierten Pfad verfügbar zu machen.
+
+## 4.2 Security
+
+Aufgrund des Umgangs mit Nutzerdaten und den potentiellen Erweiterungen, wie z. B. eines Buchhaltungs- oder Protokollmoduls spielt für eine Vereinsverwaltung der Sicherheitsaspekt eine erhöhte Rolle. Die Herausforderung besteht dabei darin, die technischen Anforderungen mit den konzeptionellen und juristischen zu verbinden, um eine robuste Lösung zu entwickeln.
+
+Dabei ist die Best Practice zur Entwicklung von sicherheitsorientierten Systemen, dass man auf ausgereifte Frameworks zurückgreift. Die Software nutzt daher _Spring Security_ und _Spring Security Access Control Lists_ (ACL), um sowohl Methoden-, als Auch Objekt-Sicherheit zu garantieren. Gleichzeitig erhält das System die Statelessness durch Authentifizierung und Autorisierung über JSON Web Tokens (JWT).
+
+### 4.2.1 Authentifizierung und Autorisierung
+
+Um das Prinzip der Statelessness umzusetzen, greift der Server auf JWT zurück. Die Authentifizierung erfolgt über einen Aufruf der API, die ein JWT zurück gibt. Das JWT repräsentiert die ausgeführte Autorisierung. Um serverseitig geschützte Funktionen nutzen zu können muss ein Client bei jedem Aufruf das JWT senden, um die Autorisierung nachzuweisen.
+
+Der Ablauf ist im folgenden Sequenzdiagramm dargestellt.
+
+![JWT Authentifizierungsschema, Quelle: jwt.io](../server-jwt-diagram.png "JWT Authentifizierungsschema, Quelle: jwt.io")
+JWT Authentifizierungsschema, Quelle: [jwt.io](jwt.io)
+
+Serverseitig wird die Login-Funktionalität (Token-Request) unter dem Endpoint `/login` zur Verfügung gestellt.
+
+Aufgrund der Funktionsweise der JWTs ist ein _echter_ Log-out nicht möglich. Daher verfällt ein JWT nach einer festgesetzten Zeit (_Expiration_) von 1 Tag.
+
+### 4.2.2 Method Security
+
+Das System stellt den Nutzern bestimmte Funktionalitäten zur Verfügung. Jede der unter _Method Security_ stehenden Funktionen haben einen eindeutigen Bezeichner und eine zugeörige Berechtigung (_Permission_). Alle verfügbaren Permissions werden unter `/permissions` ausgegeben. Permissions werden in Rollen (_Roles_) aggregiert, die wiederum den System-Nutzern (_Users_) zugewiesen werden können. Die für den Client notwendigen Informationen zur Server-Interaktion können der API-Beschreibung entnommen werden.
+
+### 4.2.3 Object Security
+
+Der Aspekt Object Security greift im _Contact-Management-Modul_ (CM). Dabei kommt Spring Security ACL zum Einsatz.
+
+Im CM existieren Kontakte (_Contacts_), die jeweils ihre eigene Access Control List (ACL) mit sich führen. Bei der Anfrage an einen Kontakt wird für den anfragenden Nutzer überprüft, ob diese die notwendigen Rechte auf das Nutzer-Objekt hat -- und nur wenn das der Fall ist, wird das Nutzerobjekt freigegeben.
+
+Die ACLs werden durch einen MutableAclService verwaltet. In der Software kommt dabei eine modifizierte Version der Referenzimplementierung  (JdbcMutableAclService) zum Einsatz. Dieser muss bei jeder Operation auf Contacts mit bedacht und eingebunden werden, um die Objektsicherheit zu garantieren.
+
+![Kontext des MutableAclService](../server-mutableaclservice.png "Kontext des MutableAclService")
+
+Unsere Modifizierung erweitert das System um eine weitere Aggregationsebene: _Groups_. Diese ermgöglicht den Systemnutzern das komfortable Verwalten von ACL-gesicherten Kontakten unter Garantie der Objektsicherheit.
+
+![ACL Entscheidungsfindung](../server-acl-permission-decision.png "ACL Entscheidungsfindung")
+
+## 4.3 Konfiguration
+
+Die Konfiguration erfolgt serverseitig durch die `server/mv/src/main/resources/application.properties`. Konfigurations-Parameter können über Kommandozeilenparameter eingebunden werden. Es ist geplant die Konfigurationsdateien einfacher zugänglich zu machen.
+
+# 5. Datenmodell
+
+## 5.1 SQL
+
+Das aktuelle Datenbank-Schema liegt unter dem Pfad `server/mv/src/main/resources/db/migration/V1__init.sql`. Beim Start der Software stellt die Migrationslösung _Flyway_ die Integrität des Datenbankschemas sicher, indem es entweder 1) den Datenbank-Zustand aus der `V1__init.sql` herstellt, 2) die Migration unterbricht und einen Fehler wirft oder 3) die Migration von einer alten auf eine neue Version herstellt. Damit ist die zukünftige Update- oder Erweiterbarkeits-Fähigkeit der Software sichergestellt.
+
+![Datenbank Modell des Servers, V1__init.sql](../server-database-model.png "Datenbank Modell des Servers, V1__init.sql") 
+
+Aus dem Datenbank-Schema gehen die oben angeführten Sicherheitsaspekte hervor. Die verschiedenen Bereiche sind entsprechend markiert.
+
+## 5.2 Module und Klassen
+
+### 5.2.1 Das System (SYS)
+
+Das System ist für das systemseitige Rechte und Rollenmanagement sowie die grundlegende Sicherheitsverwaltung unter Verwendung von Spring Security zuständig. In die Sphäre des Systems fällt die gesamte Nutzerverwaltung, inkl. Anmeldeprozess für Systemnutzer.
+
+Relevante Java-Klassen sind die **User**, **Rollen** und **Authorities**, wobei Rollen Authorities und User miteinander verbinden (siehe SQL-Schema). Damit können alle Systemuser im System bestimmte Rollen mit festgelegten Authorities einnehmen. 
+
+### 5.2.2 Contact Management (CM)
+
+Das CM ist durch ACL-Objekt-Sicherheit geschützt. Es umfasst Contacts und Gruppen. Dabei repräsentieren die Contacts Visitenkarten mit Kontakt-Informationen, die in Gruppen zusammengefasst werden. Über ACL wird sichergestellt, dass nur diejenigen Systemnutzer, die die richtigen Rechte auf die Contact-Objekte haben, diese auch verändern dürfen.
+
+### 5.2.3 Messaging
+
+Das System nutzt einen einfachen **JavaMailSender** und **SimpleMailMessages** zum versenden von Systemnachrichten. Dieses Modul wird zukünftig als zentrale Anlaufstelle für Nachrichten-Versand ausgebaut.
+
+# 6. Glossar
+
+| Begriff | Beschreibung                                                 |
+|:--------|:-------------------------------------------------------------|
+| API | Als Application Programming Interface bezeichnet man Schnittstellen zur Anwendungsprogrammierung. Um eine Kommunikation über das Netzwerk zu ermöglichen, stellt häufig ein Server eine solche Schnittstelle zur Verfügung, die dann vom Client angewendet wird. |
+| JWT | JSON Web Tokens, ein modernes Authentifizierungs-Schema. |
+| Passing Build | Eine Passing Build beschreibt eine funktionierende Version der Software, deren Tests fehlerfrei abgelaufen sind und die zu einer ausführbaren Version gebündelt werden konnte. |
+| SWTP    | Das Software-Technik-Praktikum. Pflichtmodul an der Universität Leipzig im Rahmen dessen das Projekt Mitgliederverwaltung abgewickelt wird. |
+| V1/V2 | Das Projekt wird im Rahmen des SWTP durchgeführt. Dabei ist der Projekt-Scope auf die Kernaspekte des Projekts beschränkt, um im Rahmen der Vorgaben ein angemessenes Ergebnis zu erzielen. V1 bezeichnet dabei den Scope des SWTP. Unter dem Begriff V2 werden diejenigen Themen zusammengefasst, die über den Scope des SWTP hinaus gehen. |
