@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: de.ul.swtp.security.controller.UsersRestControllerTest
--------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.653 s - in de.ul.swtp.security.controller.UsersRestControllerTest

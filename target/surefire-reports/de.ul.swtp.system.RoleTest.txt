@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: de.ul.swtp.system.RoleTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.016 s - in de.ul.swtp.system.RoleTest
