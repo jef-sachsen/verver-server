@@ -1,0 +1,13 @@
+[source,bash]
+----
+$ echo '{
+    "email": "max@mustercontact.com",
+    "firstName": "Max",
+    "lastName": "Musterkontakt",
+    "phone": "017612345678",
+    "address": "Musterkontaktstr. 123",
+    "bankDetails": "Musterbank",
+    "groups": null
+}' | http POST 'http://localhost:8080/contacts' \
+    'Content-Type:application/json;charset=UTF-8'
+----

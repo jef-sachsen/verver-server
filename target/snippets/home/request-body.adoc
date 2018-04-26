@@ -1,0 +1,12 @@
+[source,options="nowrap"]
+----
+{
+    "email": "max@mustercontact.com",
+    "firstName": "Max",
+    "lastName": "Musterkontakt",
+    "phone": "017612345678",
+    "address": "Musterkontaktstr. 123",
+    "bankDetails": "Musterbank",
+    "groups": null
+}
+----

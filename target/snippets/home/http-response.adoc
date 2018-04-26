@@ -1,0 +1,24 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 201 Created
+Content-Type: application/json;charset=UTF-8
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: SAMEORIGIN
+Content-Length: 242
+
+{
+  "id" : 10,
+  "email" : "max@mustercontact.com",
+  "firstName" : "Max",
+  "lastName" : "Musterkontakt",
+  "phone" : "017612345678",
+  "address" : "Musterkontaktstr. 123",
+  "bankDetails" : "Musterbank",
+  "groups" : null,
+  "user" : null
+}
+----

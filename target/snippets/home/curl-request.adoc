@@ -1,0 +1,14 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/contacts' -i -X POST \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -d '{
+    "email": "max@mustercontact.com",
+    "firstName": "Max",
+    "lastName": "Musterkontakt",
+    "phone": "017612345678",
+    "address": "Musterkontaktstr. 123",
+    "bankDetails": "Musterbank",
+    "groups": null
+}'
+----

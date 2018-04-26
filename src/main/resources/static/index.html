@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css"
+          integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
+</head>
+<body style="padding-top: 100px">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">VerVer</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-danger" id="notLoggedIn">Not logged in!</div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-6">
+            <div class="card my-3" id="login">
+                <div class="card-body">
+                    <h3 class="card-title">Login</h3>
+                    <div class="card-text">
+                        <p>Try one of the following logins</p>
+                        <ul>
+                            <li>admin & admin</li>
+                            <li>user & password</li>
+                            <li>disabled & password</li>
+                        </ul>
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Enter Username"
+                                   required name="username">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="exampleInputPassword1"
+                                   placeholder="Enter Password" required name="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="userInfo">
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Authenticated user</h3>
+                        <div id="userInfoBody"></div>
+                        <button type="button" class="btn btn-danger" id="logoutButton">logout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div id="loggedIn">
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h3 class="card-title">Token information</h3>
+                        <div id="loggedInBody"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="card my-3">
+                <div class="card-body">
+                    <h3 class="card-title">Request:</h3>
+                    <div class="btn-role" role="role" aria-label="..." style="margin-bottom: 16px;">
+                        <button type="button" class="btn btn-default" id="exampleServiceBtn">call example service</button>
+                        <button type="button" class="btn btn-default" id="adminServiceBtn">call admin protected service
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card my-3">
+                <div class="card-body">
+                    <h3 class="card-title">Response:</h3>
+                    <pre id="response"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Adress</th>
+                        <th scope="col">Admin</th>
+                        <th scope="col">Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td scope="row">1</td>
+                        <td>David</td>
+                        <td>Reinartz</td>
+                        <td>david.reinartz@gmail.com</td>
+                        <td>
+                            <tel>+49 123 456 789 0</tel>
+                        </td>
+                        <td>Riebeckstraße 13</td>
+                        <td></td>
+                        <td>
+                            <i class="fas fa-edit"></i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row">2</td>
+                        <td>Felix</td>
+                        <td>Förtsch</td>
+                        <td>felixfoertsch@gmail.com</td>
+                        <td>+49 151 525 676 44</td>
+                        <td>Kurt-Eisner-Straße 55</td>
+                        <td>
+                            <i class="fas fa-check"></i>
+                        </td>
+                        <td>
+                            <i class="fas fa-edit"></i>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="loginErrorModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Login unsuccessful</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"-->
+<!--integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"-->
+<!--crossorigin="anonymous"></script>-->
+<script src="https://code.jquery.com/jquery-2.2.2.js"
+        integrity="sha256-4/zUCqiq0kqxhZIyp4G0Gk+AOtCJsY1TA00k5ClsZYE="
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="js/libs/jwt-decode.min.js"></script>
+<script src="js/client.js"></script>
+</body>
+</html>

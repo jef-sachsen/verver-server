@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: de.ul.swtp.modules.contactmanagement.ContactTest
+-------------------------------------------------------------------------------
+Tests run: 25, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.027 s - in de.ul.swtp.modules.contactmanagement.ContactTest
