@@ -13,10 +13,10 @@ public class JavaMailSenderConfig {
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost("regulus.uberspace.de");
-        javaMailSender.setPort(587);
-        javaMailSender.setUsername("mv@felixfoertsch.de");
-        javaMailSender.setPassword("zWiXUjNwWxsNNG2mW2vP5uQUzap85Q");
+        javaMailSender.setHost("");
+        javaMailSender.setPort();
+        javaMailSender.setUsername("");
+        javaMailSender.setPassword("");
 
         Properties props = javaMailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
