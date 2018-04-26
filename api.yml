@@ -1,0 +1,1002 @@
+swagger: "2.0"
+info:
+  description: "SWT API"
+  version: "1.4.0"
+  title: "SWT API"
+  termsOfService: "http://localhost/terms/"
+  contact:
+    email: "lek@outlook.de"
+  license:
+    name: "private"
+    url: "http://localhost/licenses"
+host: "localhost"
+basePath: "/"
+tags:
+- name: "permissions"
+  description: "Permission operations"
+- name: "roles"
+  description: "Role operations"
+- name: "users"
+  description: "User operations"
+- name: "groups"
+  description: "Group operations"
+- name: "contacts"
+  description: "Contact operations"
+- name: "login"
+  description: "Authentication operations"
+- name: "signup"
+  description: "Signup operations"
+schemes:
+- "http"
+paths:
+  /permissions:
+    get:
+      tags:
+      - "permissions"
+      summary: "Get All Permissions"
+      operationId: getPermissions
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: page
+        type: integer
+        description: "Number of page for pagination"
+        required: false
+      - in: query
+        name: size
+        type: integer
+        description: "Number of items per page for pagination"
+        required: false
+      - in: query
+        name: sort
+        type: array
+        items: 
+          type: string
+        description: "Sorting criterium and order. Scheme: ?sort={criterium},{order} where order is one of [asc, desc]."
+        required: false
+      - in: query
+        name: ids
+        type: array
+        items:
+          type: number
+          format: int64
+        description: "List of permission ids."
+        required: false
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Permissions'
+  /permissions/{id}:
+    get:
+      tags:
+      - "permissions"
+      summary: "Get Permission"
+      operationId: getPermission
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        type: integer
+        name: id
+        description: "id of group"
+        required: true
+      responses:
+        default:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Permissions'
+  /roles:
+    get:
+      tags:
+      - "roles"
+      summary: "Get All Roles"
+      operationId: getRoles
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: page
+        type: integer
+        description: "Number of page for pagination"
+        required: false
+      - in: query
+        name: size
+        type: integer
+        description: "Number of items per page for pagination"
+        required: false
+      - in: query
+        name: sort
+        type: array
+        items: 
+          type: string
+        description: "Sorting criterium and order. Scheme: ?sort={criterium},{order} where order is one of [asc, desc]."
+        required: false
+      - in: query
+        name: ids
+        type: array
+        items:
+          type: number
+          format: int64
+        description: "List of role ids."
+        required: false
+      responses:
+        default:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Roles'
+    post:
+      tags:
+      - "roles"
+      summary: "Create role"
+      description: "Create a new role. This can only be done by a logged in user."
+      operationId: createRole
+      produces:
+      - "application/json"
+      parameters:
+      - in: body
+        name: body
+        description: "Created role object."
+        required: true
+        schema:
+          $ref: "#/definitions/Role"
+      responses:
+        default:
+          description: "successful operation."
+          schema:
+            $ref: "#/definitions/Role"
+  /roles/{id}:
+    get:
+      tags:
+      - "roles"
+      summary: "Get role by id"
+      description: "Retrieve the role with the specified id."
+      operationId: getRoleById
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the role to be retrieved."
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Role"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "Role not found"
+    put:
+      tags:
+      - "roles"
+      summary: "Update role by id"
+      description: "This can only be done by the logged in user."
+      operationId: updateRole
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "id of the role to be updated"
+        required: true
+        type: integer
+      - in: "body"
+        name: "body"
+        description: "Updated role object. Fields that are null are not updated."
+        required: true
+        schema:
+          $ref: "#/definitions/Role"
+      responses:
+        400:
+          description: "Invalid role supplied"
+        404:
+          description: "Role not found"
+    delete:
+      tags:
+      - "roles"
+      summary: "Delete role by id"
+      description: "This can only be done by the logged in user."
+      operationId: deleteRole
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the role to be deleted"
+        required: true
+        type: integer
+      responses:
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "Role not found"
+  /users:
+    get:
+      tags:
+      - "users"
+      summary: "Get users"
+      description: "Retrieve a page of users. This can only be done by a logged in user."
+      operationId: getUsers
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: page
+        type: integer
+        description: "Number of page for pagination"
+        required: false
+      - in: query
+        name: size
+        type: integer
+        description: "Number of items per page for pagination"
+        required: false
+      - in: query
+        name: sort
+        type: array
+        items: 
+          type: string
+        description: "Sorting criterium and order. Scheme: ?sort=<criterium>,<order> where order is one of {asc, desc}."
+        required: false
+      - in: query
+        name: ids
+        type: array
+        items:
+          type: number
+          format: int64
+        description: "List of user ids."
+        required: false
+      responses:
+        200:
+          description: "Successful operation."
+          schema:
+            $ref: "#/definitions/Users"
+        400:
+          description: "Page out of range."
+    post:
+      tags:
+      - "users"
+      summary: "Create user"
+      description: "Create a new user. This can only be done by a logged in user."
+      operationId: createUser
+      produces:
+      - "application/json"
+      parameters:
+      - in: body
+        name: body
+        description: "Created user object."
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation."
+          schema:
+            $ref: "#/definitions/User"
+  /users/{id}:
+    get:
+      tags:
+      - "users"
+      summary: "Get user by id"
+      description: "Retrieve the user with the specified id."
+      operationId: getUserById
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the user to be retrieved."
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+    put:
+      tags:
+      - "users"
+      summary: "Update user by id"
+      description: "This can only be done by the logged in user."
+      operationId: "updateUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "id of the user that needs to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+    delete:
+      tags:
+      - "users"
+      summary: "Delete user by id"
+      description: "This can only be done by the logged in user."
+      operationId: "deleteUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the user that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+  /groups:
+    get:
+      tags:
+      - "groups"
+      summary: "Get Groups"
+      operationId: getGroups
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: page
+        type: integer
+        description: "Number of page for pagination"
+        required: false
+      - in: query
+        name: size
+        type: integer
+        description: "Number of items per page for pagination"
+        required: false
+      - in: query
+        name: sort
+        type: array
+        items: 
+          type: string
+        description: "Sorting criterium and order. Scheme: ?sort=<criterium>,<order> where order is one of {asc, desc}."
+        required: false
+      - in: query
+        name: ids
+        type: array
+        items:
+          type: number
+          format: int64
+        description: "List of group ids."
+        required: false
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Groups'
+    post:
+      tags:
+      - "groups"
+      summary: "New Group"
+      operationId: newGroup
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "New Group"
+        required: true
+        schema:
+          $ref: "#/definitions/Group"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Group'
+  /groups/{id}:
+    get:
+      tags:
+      - "groups"
+      summary: "Get Group"
+      operationId: getGroup
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        type: integer
+        name: id
+        description: "id of group"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Get Group"
+        required: true
+        schema:
+          $ref: "#/definitions/Group"
+      responses:
+        default:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Role'
+    put:
+      tags:
+      - "groups"
+      summary: "Update Group"
+      operationId: updateGroup
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        type: integer
+        name: id
+        description: "id of group"
+        required: true
+      - in: "body"
+        name: "body"
+        description: "Updated Group"
+        required: true
+        schema:
+          $ref: "#/definitions/Group"
+      responses:
+        default:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Group'
+  /contacts:
+    get:
+      tags:
+      - "contacts"
+      summary: "Get All Contacts"
+      operationId: getContacts
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: page
+        type: integer
+        description: "Number of page for pagination"
+        required: false
+      - in: query
+        name: size
+        type: integer
+        description: "Number of items per page for pagination"
+        required: false
+      - in: query
+        name: sort
+        type: array
+        items: 
+          type: string
+        description: "Sorting criterium and order. Scheme: ?sort={criterium},{order} where order is one of [asc, desc]."
+        required: false
+      - in: query
+        name: group
+        type: integer
+        description: "Group id of which the contacts are to be retrieved. Higher priority than ids parameter."
+        required: false
+      - in: query
+        name: ids
+        type: array
+        items:
+          type: number
+          format: int64
+        description: "List of contact ids. Lower priority than group parameter."
+        required: false
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/Contacts'
+    post:
+      tags:
+      - "contacts"
+      summary: "Create contact"
+      description: "Create a new contact. This can only be done by a logged in user."
+      operationId: createContact
+      produces:
+      - "application/json"
+      parameters:
+      - in: body
+        name: body
+        description: "Created contact object."
+        required: true
+        schema:
+          $ref: "#/definitions/Contact"
+      responses:
+        200:
+          description: "successful operation."
+          schema:
+            $ref: "#/definitions/Contact"
+  /contacts/{id}:
+    get:
+      tags:
+      - "contacts"
+      summary: "Get contact by id"
+      description: "Retrieve the contact with the specified id."
+      operationId: getContactById
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the contat to be retrieved."
+        required: true
+        type: integer
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Contact"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "Contact not found"
+        401:
+          description: "Access is denied"
+    put:
+      tags:
+      - "contacts"
+      summary: "Update contact by id"
+      description: "This can only be done by the logged in user."
+      operationId: updateContact
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "id of the contact to be updated"
+        required: true
+        type: integer
+      - in: "body"
+        name: "body"
+        description: "Updated contact object. Fields that are null are not updated with exception of field user. This field is set to null when a contact with 'user: null' is presented."
+        required: true
+        schema:
+          $ref: "#/definitions/Contact"
+      responses:
+        400:
+          description: "Invalid contact supplied"
+        404:
+          description: "Contact not found"
+        401:
+          description: "Access is denied"
+    delete:
+      tags:
+      - "contacts"
+      summary: "Delete contact by id"
+      description: "This can only be done by the logged in user."
+      operationId: deleteContact
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        name: "id"
+        description: "The id of the contact to be deleted"
+        required: true
+        type: integer
+      responses:
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "Contact not found"
+        401:
+          description: "Access is denied"
+  /login:
+    post:
+      tags:
+      - "login"
+      summary: "Logs user into the system"
+      operationId: "loginUser"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Login Credentials"
+        required: true
+        schema:
+          $ref: "#/definitions/Credentials"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Token"
+          headers:
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+        400:
+          description: "Bad credentials"
+  /signup:
+    post:
+      tags: 
+      - "signup"
+      summary: "Signs a user up."
+      operationId: signUp
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User to be signed up."
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Bad credentials"
+  /signup/{emailVerificationTokenString}:
+    get:
+      tags:
+      - "signup"
+      summary: "Verify the signed up user."
+      operationId: verifySignUp
+      produces:
+      - "application/json"
+      parameters:
+      - in: path
+        type: integer
+        name: "emailVerificationTokenString"
+        description: "Token that is sent to the user via email."
+        required: true
+      responses:
+        200:
+          description: "successful operation"
+definitions:
+  Permission:
+    type: object
+    properties:
+      id:
+        type: number
+        format: int64
+      name:
+        type: string
+  Role:
+    type: object
+    properties:
+      id:
+        type: number
+        format: int64
+      name:
+        type: string
+      permissions:
+        description: "List of permission ids."
+        type: array
+        items:
+          type: number
+          format: int64
+      users:
+        description: "List of user ids."
+        type: array
+        items:
+          type: number
+          format: int64
+  User:
+    type: object
+    properties:
+      id:
+        type: number
+        format: int64
+      username:
+        type: string
+      password:
+        description: "Not sent back in responses."
+        type: string
+      enabled:
+        type: boolean
+      admin:
+        type: boolean
+      roles:
+        description: "List of role ids."
+        type: array
+        items:
+          type: number
+          format: int64
+      groups:
+        description: "List of group ids."
+        type: array
+        items:
+          type: number
+          format: int64
+      contact:
+        description: "(Optional) id of connected contact."
+        type: number
+        format: int64
+  Group:
+    type: object
+    properties:
+      id:
+        type: number
+        format: int64
+      name:
+        type: string
+      permission:
+        description: "Permission that users have over contacts in this group. Must be one of [READ, WRITE, UPDATE, DELETE, ADMINISTRATION]."
+        type: string
+      contacts:
+        description: "List of contact ids."
+        type: array
+        items:
+          type: number
+          format: int64
+      responsibles:
+        description: "List of contact ids which have responsible status for this group. Subset of contacts."
+        type: array
+        items:
+          type: number
+          format: int64
+      users:
+        description: "List of user ids."
+        type: array
+        items:
+          type: number
+          format: int64
+  Contact:
+    type: object
+    properties:
+      id:
+        type: number
+        format: int64
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      phone:
+        type: string
+      address:
+        type: string
+      bankDetails:
+        type: string
+      groups:
+        description: "List of group ids."
+        type: array
+        items:
+          type: number
+          format: int64
+  Permissions:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Permission'
+      pageable:
+        $ref: '#/definitions/Pageable'
+      totalPages:
+        type: number
+        format: int64
+      totalElements:
+        type: number
+        format: int64
+      last:
+        description: "True if on last page."
+        type: boolean
+      first:
+        description: "True if on first page."
+        type: boolean
+      sort:
+        $ref: '#/definitions/Sort'
+      numberOfElements:
+        type: number
+        format: int64
+      size:
+        type: number
+        format: int64
+      number:
+        type: number
+        format: int64
+  Roles:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Role'
+      pageable:
+        $ref: '#/definitions/Pageable'
+      totalPages:
+        type: number
+        format: int64
+      totalElements:
+        type: number
+        format: int64
+      last:
+        description: "True if on last page."
+        type: boolean
+      first:
+        description: "True if on first page."
+        type: boolean
+      sort:
+        $ref: '#/definitions/Sort'
+      numberOfElements:
+        type: number
+        format: int64
+      size:
+        type: number
+        format: int64
+      number:
+        type: number
+        format: int64
+  Users:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/User'
+      pageable:
+        $ref: '#/definitions/Pageable'
+      totalPages:
+        type: number
+        format: int64
+      totalElements:
+        type: number
+        format: int64
+      last:
+        description: "True if on last page."
+        type: boolean
+      first:
+        description: "True if on first page."
+        type: boolean
+      sort:
+        type: object
+        $ref: '#/definitions/Sort'
+      numberOfElements:
+        type: number
+        format: int64
+      size:
+        type: number
+        format: int64
+      number:
+        type: number
+        format: int64
+  Groups:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Group'
+      pageable:
+        $ref: '#/definitions/Pageable'
+      totalPages:
+        type: number
+        format: int64
+      totalElements:
+        type: number
+        format: int64
+      last:
+        description: "True if on last page."
+        type: boolean
+      first:
+        description: "True if on first page."
+        type: boolean
+      sort:
+        type: object
+        $ref: '#/definitions/Sort'
+      numberOfElements:
+        type: number
+        format: int64
+      size:
+        type: number
+        format: int64
+      number:
+        type: number
+        format: int64
+  Contacts:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Contact'
+      pageable:
+        $ref: '#/definitions/Pageable'
+      totalPages:
+        type: number
+        format: int64
+      totalElements:
+        type: number
+        format: int64
+      last:
+        description: "True if on last page."
+        type: boolean
+      first:
+        description: "True if on first page."
+        type: boolean
+      sort:
+        type: object
+        $ref: '#/definitions/Sort'
+      numberOfElements:
+        type: number
+        format: int64
+      size:
+        type: number
+        format: int64
+      number:
+        type: number
+        format: int64
+  Credentials:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Token:
+    type: object
+    properties:
+      jwt:
+        type: string
+  ApiResponse:
+    type: object
+    properties:
+      code:
+        type: number
+        format: int32
+      type:
+        type: string
+      message:
+        type: string
+  Pageable:
+    type: "object"
+    properties:
+      sort:
+        $ref: '#/definitions/Sort'
+      pageSize:
+        type: integer
+      pageNumber:
+        type: integer
+      offset:
+        type: integer
+      paged:
+        type: boolean
+      unpaged:
+        type: boolean
+  Sort:
+    type: object
+    properties:
+      sorted:
+        type: boolean
+      unsorted:
+        type: boolean
+  Info:
+    type: object
+    properties:
+      version:
+        type: string
+      status:
+        type: object
+        properties:
+          code:
+            type: string
+          devMsg:
+            type: string
+          userMsg:
+            type: string
+      modules:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            version:
+              type: string
+            active:
+              type: boolean
