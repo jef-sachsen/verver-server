@@ -30,7 +30,7 @@ public class CustomJdbcMutableAclService extends JdbcMutableAclService {
         System.out.println("Group name: " + groupName);
         String createGrantedAuthoritySidForGroup = "INSERT INTO acl_sid (principal, sid) VALUES (FALSE, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        PreparedStatementCreatorFactory factory = new PreparedStatementCreatorFactory(createGrantedAuthoritySidForGroup, new int[]{Types.VARCHAR});
+        PreparedStatementCreatorFactory factory = new PreparedStatementCreatorFactory(createGrantedAuthoritySidForGroup, Types.VARCHAR);
         factory.setReturnGeneratedKeys(true);
         jdbcTemplate.update(factory.newPreparedStatementCreator(new Object[]{groupName}), keyHolder);
         System.out.println("keyHolder: " + keyHolder.getKey());

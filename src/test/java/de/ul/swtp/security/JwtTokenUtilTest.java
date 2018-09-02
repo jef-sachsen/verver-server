@@ -37,7 +37,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void testGenerateTokenGeneratesDifferentTokensForDifferentCreationDates() throws Exception {
+    public void testGenerateTokenGeneratesDifferentTokensForDifferentCreationDates() {
         when(clockMock.now())
             .thenReturn(DateUtil.yesterday())
             .thenReturn(DateUtil.now());
@@ -49,7 +49,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void getUsernameFromToken() throws Exception {
+    public void getUsernameFromToken() {
         when(clockMock.now()).thenReturn(DateUtil.now());
 
         final String token = createToken();
@@ -58,7 +58,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void getCreatedDateFromToken() throws Exception {
+    public void getCreatedDateFromToken() {
         final Date now = DateUtil.now();
         when(clockMock.now()).thenReturn(now);
 
@@ -68,7 +68,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void getExpirationDateFromToken() throws Exception {
+    public void getExpirationDateFromToken() {
         final Date now = DateUtil.now();
         when(clockMock.now()).thenReturn(now);
         final String token = createToken();
@@ -78,7 +78,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test(expected = ExpiredJwtException.class)
-    public void expiredTokenCannotBeRefreshed() throws Exception {
+    public void expiredTokenCannotBeRefreshed() {
         when(clockMock.now())
             .thenReturn(DateUtil.yesterday());
         String token = createToken();
@@ -86,7 +86,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void changedPasswordCannotBeRefreshed() throws Exception {
+    public void changedPasswordCannotBeRefreshed() {
         when(clockMock.now())
             .thenReturn(DateUtil.now());
         String token = createToken();
@@ -102,7 +102,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void canRefreshToken() throws Exception {
+    public void canRefreshToken() {
         when(clockMock.now())
             .thenReturn(DateUtil.now())
             .thenReturn(DateUtil.tomorrow());
@@ -114,7 +114,7 @@ public class JwtTokenUtilTest {
     }
 
     @Test
-    public void canValidateToken() throws Exception {
+    public void canValidateToken() {
         when(clockMock.now())
             .thenReturn(DateUtil.now());
         UserDetails userDetails = mock(JwtUser.class);

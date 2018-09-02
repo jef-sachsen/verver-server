@@ -2,18 +2,22 @@ package de.ul.swtp.modules.contactmanagement;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import de.ul.swtp.modules.contactmanagement.contactdetails.Address;
+import de.ul.swtp.modules.contactmanagement.contactdetails.BankAccount;
+import de.ul.swtp.modules.contactmanagement.contactdetails.VoluntaryDetails;
 import de.ul.swtp.system.User;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "mv_cm_contacts")
+@Table(name = "cm_contacts")
 @Data
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -38,16 +42,24 @@ public class Contact implements Serializable {
     @javax.validation.constraints.NotBlank
     private String lastName;
 
+    @DateTimeFormat
+    private Date dateOfBirth;
+
     //TODO: write regex (or custom validator) for phone numbers
     //@Pattern(regexp = )
     // Note: phone numbers are currently optional
     @Digits(integer = 16, fraction = 0)
     private String phone;
 
-    @javax.validation.constraints.NotBlank
-    private String address;
-    
-    private String bankDetails;
+    //@javax.validation.constraints.NotBlank
+    @OneToOne
+    private Address address;
+
+    @OneToOne
+    private BankAccount bankAccount;
+
+    @OneToOne
+    private VoluntaryDetails voluntaryDetails;
 
     @ManyToMany(mappedBy = "contacts", fetch = FetchType.LAZY)
     @JsonIdentityReference(alwaysAsId = true)
@@ -58,7 +70,4 @@ public class Contact implements Serializable {
     //@JsonIgnore
     private User user;
 
-    public String toString() {
-        return "Contact(id=" + this.getId() + ", email=" + this.getEmail() + ", firstName=" + this.getFirstName() + ", lastName=" + this.getLastName() + ", phone=" + this.getPhone() + ", address=" + this.getAddress() + ", bankDetails=" + this.getBankDetails() + ")";
-    }
 }

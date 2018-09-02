@@ -88,7 +88,7 @@ public class ContactManagerImpl implements ContactManager {
         if (contact.getLastName() != null) contactToBeUpdated.setLastName(contact.getLastName());
         if (contact.getPhone() != null) contactToBeUpdated.setPhone(contact.getPhone());
         if (contact.getAddress() != null) contactToBeUpdated.setAddress(contact.getAddress());
-        if (contact.getBankDetails() != null) contactToBeUpdated.setBankDetails(contact.getBankDetails());
+        if (contact.getBankAccount() != null) contactToBeUpdated.setBankAccount(contact.getBankAccount());
         if (contact.getGroups() != null) contactToBeUpdated.setGroups(contact.getGroups());
         //Only do something when contact.getUser() != null
         //Delete relation when user.getContact().getId() is 0.

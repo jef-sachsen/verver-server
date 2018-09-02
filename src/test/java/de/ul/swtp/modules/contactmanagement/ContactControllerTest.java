@@ -35,7 +35,7 @@ public class ContactControllerTest {
     @Autowired private ContactRepository contactRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         //create sample contacts
         for(int i = 1; i < 10; ++i){
             Contact contact = new Contact();
@@ -45,8 +45,6 @@ public class ContactControllerTest {
             contact.setFirstName("Max");
             contact.setLastName("Musterkontakt");
             contact.setPhone("017612"+i+"678");
-            contact.setAddress("Musterkontaktstr. "+i);
-            contact.setBankDetails("Musterbank " + i);
 
             contactRepository.save(contact);
         }
@@ -80,7 +78,7 @@ public class ContactControllerTest {
                 "    \"lastName\": \""+lastName+"\",\n" +
                 "    \"phone\": \""+phone+"\",\n" +
                 "    \"address\": \""+address+"\",\n" +
-                "    \"bankDetails\": \""+bankDetails+"\",\n" +
+                "    \"bankAccount\": \""+bankDetails+"\",\n" +
                 "    \"groups\": null\n" +
                 "}";
         //add user
@@ -175,7 +173,7 @@ public class ContactControllerTest {
 
         //checks every field that should be implemented according to yml
         String[] fields = {
-                "id", "email", "firstName", "lastName", "phone", "address", "bankDetails"
+                "id", "email", "firstName", "lastName", "phone", "address", "bankAccount"
         };
         for (int i = 0; i < fields.length; i++) {
 

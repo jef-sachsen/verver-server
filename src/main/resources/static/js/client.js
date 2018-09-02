@@ -4,7 +4,7 @@
 
 $(function () {
     // VARIABLES =============================================================
-    var TOKEN_KEY = "jwtToken"
+    var TOKEN_KEY = "jwtToken";
     var $notLoggedIn = $("#notLoggedIn");
     var $loggedIn = $("#loggedIn").hide();
     var $loggedInBody = $("#loggedInBody");

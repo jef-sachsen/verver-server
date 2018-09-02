@@ -28,7 +28,7 @@ public class ContactTest {
     public void testSetUp(){
         testContact.setFirstName("validFirstName");
         testContact.setLastName("validLastName");
-        testContact.setAddress("Teststr. 12 04123 Leipzig");
+//        testContact.setAddress("Teststr. 12 04123 Leipzig");
     }
 
     @Test
@@ -274,7 +274,7 @@ public class ContactTest {
         );
     }
 
-    @Test
+/*    @Test
     public void addressBlank() {
         testContact.setAddress("    ");
         Set<ConstraintViolation<Contact>> constraintViolations = validator.validate(testContact);
@@ -283,5 +283,5 @@ public class ContactTest {
                 "must not be blank",
                 constraintViolations.iterator().next().getMessage()
         );
-    }
+    }*/
 }

@@ -45,14 +45,35 @@ CREATE TABLE acl_entry (
   ENGINE = InnoDB;
 
 -- MV TABLES
-CREATE TABLE mv_cm_contacts (
-  id           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  email        VARCHAR(255) UNIQUE,
-  first_name   VARCHAR(255),
-  last_name    VARCHAR(255),
-  phone        VARCHAR(255),
-  address      VARCHAR(255),
-  bank_details VARCHAR(255)
+CREATE TABLE cm_address (
+  id       BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  street   VARCHAR(255),
+  zip_code BIGINT(255),
+  city     VARCHAR(255),
+  country  VARCHAR(255)
+);
+
+CREATE TABLE cm_voluntarydetails (
+  id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  profession VARCHAR(255)
+);
+
+CREATE TABLE cm_bankdetails (
+  id            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  account_owner VARCHAR(255),
+  iban          VARCHAR(255)
+);
+
+CREATE TABLE cm_contacts (
+  id                   BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  email                VARCHAR(255) UNIQUE,
+  first_name           VARCHAR(255),
+  last_name            VARCHAR(255),
+  phone                VARCHAR(255),
+  date_of_birth        TIMESTAMP,
+  address_id           BIGINT UNSIGNED NOT NULL REFERENCES cm_address (id),
+  bank_account_id      BIGINT UNSIGNED NOT NULL REFERENCES cm_bankdetails (id),
+  voluntary_details_id BIGINT UNSIGNED REFERENCES cm_voluntarydetails (id)
 );
 
 CREATE TABLE mv_cm_groups (
@@ -72,7 +93,7 @@ CREATE TABLE mv_users (
   last_password_reset_date TIMESTAMP,
   username                 VARCHAR(255) UNIQUE NOT NULL,
   password                 VARCHAR(255),
-  contact_id               BIGINT UNIQUE REFERENCES mv_cm_contacts (id)
+  contact_id               BIGINT UNIQUE REFERENCES cm_contacts (id)
 );
 
 CREATE TABLE mv_users_email_verification_token (
@@ -116,81 +137,81 @@ CREATE TABLE mv_user_role (
 );
 
 CREATE TABLE mv_group_contact (
-  group_id    BIGINT NOT NULL REFERENCES mv_cm_groups (id)
+  group_id   BIGINT NOT NULL REFERENCES mv_cm_groups (id)
     ON DELETE CASCADE,
-  contact_id  BIGINT NOT NULL REFERENCES mv_cm_contacts (id)
+  contact_id BIGINT NOT NULL REFERENCES cm_contacts (id)
     ON DELETE CASCADE
 );
 
 CREATE TABLE mv_group_contact_responsible (
-  group_id    BIGINT NOT NULL REFERENCES mv_cm_groups (id)
+  group_id   BIGINT NOT NULL REFERENCES mv_cm_groups (id)
     ON DELETE CASCADE,
-  contact_id  BIGINT NOT NULL REFERENCES mv_cm_contacts (id)
+  contact_id BIGINT NOT NULL REFERENCES cm_contacts (id)
     ON DELETE CASCADE
 );
 
-INSERT INTO acl_sid (principal, sid) VALUES
-  (FALSE, 'ROLE_ADMIN'),
-  (FALSE, 'ROLE_USER');
+INSERT INTO acl_sid (principal, sid)
+VALUES (FALSE, 'ROLE_ADMIN'),
+       (FALSE, 'ROLE_USER');
 
-INSERT INTO mv_authorities (name) VALUES
-  ('ROLE_ADMIN'),
-  ('ROLE_USER'),
-  -- SYSTEM AUTHORITIES
-  -- USER
-  ('SYS_USER_GETALL'),
-  ('SYS_USER_GETUSERBYID'),
-  ('SYS_USER_GETUSERSBYIDS'),
-  ('SYS_USER_GETUSERBYUSERNAME'),
-  ('SYS_USER_GETALLBYROLE'),
-  ('SYS_USER_GETALLBYGROUP'),
-  ('SYS_USER_CREATE'),
-  ('SYS_USER_UPDATE'),
-  ('SYS_USER_DELETE'),
-  -- ROLE
-  ('SYS_ROLE_CREATE'),
-  ('SYS_ROLE_GETROLEBYID'),
-  ('SYS_ROLE_GETROLESBYIDS'),
-  ('SYS_ROLE_GETALL'),
-  ('SYS_ROLE_FINDUSERSINROLE'),
-  ('SYS_ROLE_UPDATE'),
-  ('SYS_ROLE_DELETE'),
-  ('SYS_ROLE_ADDUSERTOROLE'),
-  ('SYS_ROLE_ADDUSERSTOROLE'),
-  ('SYS_ROLE_REMOVEUSERFROMROLE'),
-  ('SYS_ROLE_REMOVEUSERSFROMROLE'),
-  ('SYS_ROLE_REMOVEALLUSERSFROMROLE'),
-  ('SYS_ROLE_ADDAUTHORITYTOROLE'),
-  ('SYS_ROLE_ADDAUTHORITIESTOROLE'),
-  ('SYS_ROLE_REMOVEAUTHORITYFROMROLE'),
-  ('SYS_ROLE_REMOVEAUTHORITIESFROMROLE'),
-  -- CONTACTMANAGEMENT AUTHORITIES
-  -- CONTACT
-  ('CM_CONTACT_CREATE'),
-  ('CM_CONTACT_GETCONTACTBYID'),
-  ('CM_CONTACT_UPDATE'),
-  ('CM_CONTACT_DELETE'),
-  ('CM_CONTACT_ADDPERMISSIONTOGROUP'),
-  ('CM_CONTACT_ADDPERMISSIONTOGROUPS'),
-  ('CM_CONTACT_GETALL'),
-  ('CM_CONTACT_GETCONTACTSBYIDS'),
-  -- GROUP
-  ('CM_GROUP_CREATE'),
-  ('CM_GROUP_GETGROUPBYID'),
-  ('CM_GROUP_GETGROUPSBYIDS'),
-  ('CM_GROUP_GETALL'),
-  ('CM_GROUP_GETALLBYCONTACTS'),
-  ('CM_GROUP_FINDUSERSINGROUP'),
-  ('CM_GROUP_UPDATE'),
-  ('CM_GROUP_DELETE'),
-  ('CM_GROUP_ADDUSERTOGROUP'),
-  ('CM_GROUP_ADDUSERSTOGROUP'),
-  ('CM_GROUP_REMOVEUSERFROMGROUP'),
-  ('CM_GROUP_REMOVEUSERSFROMGROUP'),
-  ('CM_GROUP_ADDAUTHORITYTOGROUP'),
-  ('CM_GROUP_ADDAUTHORITIESTOGROUP'),
-  ('CM_GROUP_REMOVEAUTHORITYFROMGROUP'),
-  ('CM_GROUP_REMOVEAUTHORITIESFROMGROUP');
+INSERT INTO mv_authorities (name)
+VALUES ('ROLE_ADMIN'),
+       ('ROLE_USER'),
+    -- SYSTEM AUTHORITIES
+    -- USER
+       ('SYS_USER_GETALL'),
+       ('SYS_USER_GETUSERBYID'),
+       ('SYS_USER_GETUSERSBYIDS'),
+       ('SYS_USER_GETUSERBYUSERNAME'),
+       ('SYS_USER_GETALLBYROLE'),
+       ('SYS_USER_GETALLBYGROUP'),
+       ('SYS_USER_CREATE'),
+       ('SYS_USER_UPDATE'),
+       ('SYS_USER_DELETE'),
+    -- ROLE
+       ('SYS_ROLE_CREATE'),
+       ('SYS_ROLE_GETROLEBYID'),
+       ('SYS_ROLE_GETROLESBYIDS'),
+       ('SYS_ROLE_GETALL'),
+       ('SYS_ROLE_FINDUSERSINROLE'),
+       ('SYS_ROLE_UPDATE'),
+       ('SYS_ROLE_DELETE'),
+       ('SYS_ROLE_ADDUSERTOROLE'),
+       ('SYS_ROLE_ADDUSERSTOROLE'),
+       ('SYS_ROLE_REMOVEUSERFROMROLE'),
+       ('SYS_ROLE_REMOVEUSERSFROMROLE'),
+       ('SYS_ROLE_REMOVEALLUSERSFROMROLE'),
+       ('SYS_ROLE_ADDAUTHORITYTOROLE'),
+       ('SYS_ROLE_ADDAUTHORITIESTOROLE'),
+       ('SYS_ROLE_REMOVEAUTHORITYFROMROLE'),
+       ('SYS_ROLE_REMOVEAUTHORITIESFROMROLE'),
+    -- CONTACTMANAGEMENT AUTHORITIES
+    -- CONTACT
+       ('CM_CONTACT_CREATE'),
+       ('CM_CONTACT_GETCONTACTBYID'),
+       ('CM_CONTACT_UPDATE'),
+       ('CM_CONTACT_DELETE'),
+       ('CM_CONTACT_ADDPERMISSIONTOGROUP'),
+       ('CM_CONTACT_ADDPERMISSIONTOGROUPS'),
+       ('CM_CONTACT_GETALL'),
+       ('CM_CONTACT_GETCONTACTSBYIDS'),
+    -- GROUP
+       ('CM_GROUP_CREATE'),
+       ('CM_GROUP_GETGROUPBYID'),
+       ('CM_GROUP_GETGROUPSBYIDS'),
+       ('CM_GROUP_GETALL'),
+       ('CM_GROUP_GETALLBYCONTACTS'),
+       ('CM_GROUP_FINDUSERSINGROUP'),
+       ('CM_GROUP_UPDATE'),
+       ('CM_GROUP_DELETE'),
+       ('CM_GROUP_ADDUSERTOGROUP'),
+       ('CM_GROUP_ADDUSERSTOGROUP'),
+       ('CM_GROUP_REMOVEUSERFROMGROUP'),
+       ('CM_GROUP_REMOVEUSERSFROMGROUP'),
+       ('CM_GROUP_ADDAUTHORITYTOGROUP'),
+       ('CM_GROUP_ADDAUTHORITIESTOGROUP'),
+       ('CM_GROUP_REMOVEAUTHORITYFROMGROUP'),
+       ('CM_GROUP_REMOVEAUTHORITIESFROMGROUP');
 
 -- Create one user object as the first user, called admin
 INSERT INTO mv_users (admin, enabled, account_non_expired, account_non_locked, credentials_non_expired, username, last_password_reset_date, password)
