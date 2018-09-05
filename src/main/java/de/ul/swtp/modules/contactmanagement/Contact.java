@@ -36,10 +36,10 @@ public class Contact implements Serializable {
     @Email(regexp = "^.*@.*\\..*")
     private String email;
 
-    @javax.validation.constraints.NotBlank
+    @NotBlank
     private String firstName;
 
-    @javax.validation.constraints.NotBlank
+    @NotBlank
     private String lastName;
 
     @DateTimeFormat
@@ -51,7 +51,7 @@ public class Contact implements Serializable {
     @Digits(integer = 16, fraction = 0)
     private String phone;
 
-    //@javax.validation.constraints.NotBlank
+    //@NotBlank
     @OneToOne
     private Address address;
 

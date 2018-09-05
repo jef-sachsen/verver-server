@@ -7,7 +7,6 @@ import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -38,7 +37,7 @@ public class User {
 
     //The regex ensures that only emails with top level domains are accepted (note that local email addresses are actually valid but of little use to us)
     @Email(regexp="^.*@.*\\..*")
-    @javax.validation.constraints.NotBlank
+    @NotBlank
     private String username;
 
     @Length(min=4, max=256)
