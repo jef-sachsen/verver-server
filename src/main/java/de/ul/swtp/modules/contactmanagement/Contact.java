@@ -26,13 +26,10 @@ import java.util.List;
         resolver = ContactIdResolver.class)
 public class Contact implements Serializable {
 
-    //@Null may well not work here, if the validations are call on update as well as create
-    //@Null
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // perhaps we need a @NotBlank here? Are emails obligatory?
     @Email(regexp = "^.*@.*\\..*")
     private String email;
 
@@ -51,7 +48,6 @@ public class Contact implements Serializable {
     @Digits(integer = 16, fraction = 0)
     private String phone;
 
-    //@NotBlank
     @OneToOne
     private Address address;
 
